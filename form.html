@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  
+
+  
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        overflow: hidden;
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      input[type="text"],
+      select,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        resize: vertical;
+      }
+
+      input[type="submit"] {
+        background-color: #04aa6d;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #45a049;
+      }
+
+      .container {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+      }
+      form{
+        width: 50vh;
+        height:800px;
+        display: block;
+        position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+        
+      }
+      .in{
+        border: none;
+  background-color: transparent;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  padding: 0;
+
+      }
+    </style>
+  
+  <body>
+    
+      <form action="#" method="POST" name="google">
+        <h3>回傳訂單後5碼</h3>
+
+    <div class="container">
+        <label for="fname">訂單號碼</label>
+        <input
+        class="in"
+          type="text"
+          id="fname"
+          name="訂單號碼"
+          value="230725B001"
+          readonly
+        />
+        <label for="name">訂單金額</label>
+        <input
+        class="in"
+          type="text"
+          id="name"
+          name="訂單金額"
+          value="230"
+          readonly
+        />
+        <div style="height:50px"></div>
+        <label for="lname">請輸入匯款後5碼</label>
+        <input
+            type="text"
+            id="lname"
+            name="匯款後5碼"
+            placeholder="在這輸入匯款後5碼 列如 00000"
+            pattern="[0-9]{5}"
+            maxlength="5"
+            title="請輸入5個數字"
+            required
+        />
+
+        
+
+        <div style="height:100px;"><div>
+          
+        </div></div>
+       
+        <input type="submit" value="Submit" name="submit"  />
+        
+      </form>
+      <h4 id="completionMessage" style="display: none;text-align: center;
+      font-size: 26px">你已完成訂單</h4>
+    </div>
+    <script type="text/javascript">
+        window.addEventListener("DOMContentLoaded", function () {
+        // 獲取URL中的參數
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // 從URL中獲取訂單編號和訂單價格的值
+        const orderNumber = urlParams.get("A");
+        const orderPrice = urlParams.get("B");
+
+        // 更新訂單號碼和訂單金額的值
+        document.getElementById("fname").value = orderNumber;
+        document.getElementById("name").value = orderPrice;
+      });
+      
+      
+
+      const scriptURL =
+        "https://script.google.com/macros/s/AKfycby3QUJPdRnWPXsjsI601p62Wct6OWFBEo4N1VOBT0R31h-Oxotx6FIRG_WdTVvAs0ly/exec";
+      const form = document.forms["google"];
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const Element = document.getElementById('lname');
+        const inputValue = Element.value;
+        const pattern = /^[0-9]{5}$/;
+
+        if (!pattern.test(inputValue)) {
+            alert('請輸入5個數字！');
+            return false; // 停止表單送出
+        }
+           
+
+       
+        fetch(scriptURL, { method: "POST", body: new FormData(form) })
+          .then((response) => alert("你已完成訂購"))
+          .catch((error) => console.error("Error!", error.message));
+           // 顯示完成訊息
+           var completionMessage = document.getElementById('completionMessage');
+            completionMessage.style.display = 'block';
+
+            // 找到輸入框元素和標籤元素
+            var inputElement = document.getElementById('lname');
+            var labelElement = document.querySelector('label[for="lname"]');
+
+            // 將輸入框和標籤從DOM中移除
+            inputElement.remove();
+            labelElement.remove();
+
+            // 找到按鈕元素
+            var submitButton = document.querySelector('input[type="submit"]');
+
+            // 將按鈕從DOM中移除
+            submitButton.remove();
+            console.log("123")
+      });
+  
+    </script>
+  </body>
+</html>
